@@ -8,6 +8,8 @@
     "wallets_sell": "賣出",
     "wallets_history": "歷史記錄",
     "settings": "設定",
+    "create_account_identity_title": "",
+    "create_account_identity_warning": "",
     "wallets_startup_create": "創建一個新錢包",
     "wallets_startup_create_desc": "Mask network 支援 Eth 和 Polka 網路。",
     "wallets_startup_create_action": "創建",
