@@ -45,7 +45,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     return res
                 },
                 (err) => {
-                    enqueueSnackbar(`Error: ${err.message || err}`, { key, preventDuplicate: true })
+                    enqueueSnackbar(`Error: ${err.message || err}`, { key, preventDuplicate: true, variant: 'error' })
                     onError?.(err)
                     throw err
                 },
