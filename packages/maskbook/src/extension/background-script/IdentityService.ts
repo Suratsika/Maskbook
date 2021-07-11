@@ -23,12 +23,15 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { PersonaInformation, ProfileInformation } from '@masknet/shared'
+import { createInternalSettings, InternalSettings } from '../../settings/createSettings'
 assertEnvironment(Environment.ManifestBackground)
 
 export { storeAvatar, queryAvatarDataURL } from '../../database'
 
 //#region Profile
 export { queryProfile, queryProfilePaged } from '../../database'
+
+export { createIdentityByMnemonic, queryIdentityByKey } from '../../database'
 
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
@@ -176,3 +179,19 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
         // the profile already exists
     }
 }
+
+// todo: move to file
+function create<T>(settings: InternalSettings<T>) {
+    async function get() {
+        await settings.readyPromise
+        return settings.value
+    }
+    async function set(val: T) {
+        await settings.readyPromise
+        settings.value = val
+    }
+    return [get, set] as const
+}
+
+export const currentIdentity = createInternalSettings<string>(`identity`, '')
+export const [getCurrentIdentity, setCurrentIdentity] = create(currentIdentity)

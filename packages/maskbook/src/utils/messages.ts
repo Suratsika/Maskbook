@@ -1,4 +1,6 @@
 // This file should be free of side effects
+import type { IdentityIdentifier } from '@masknet/shared'
+
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
@@ -64,6 +66,7 @@ export interface MaskMessages extends SettingsEvents {
     }
     /** Plugin ID */
     activatePluginCompositionEntry: string
+    identityChanged: IdentityIdentifier
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
 Object.assign(globalThis, { MaskMessage })
