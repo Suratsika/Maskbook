@@ -3,6 +3,7 @@ import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import classNames from 'classnames'
 export interface BackupPreview {
+    identity?: string
     email?: string
     personas: number
     accounts: number
@@ -10,6 +11,7 @@ export interface BackupPreview {
     contacts: number
     files: number
     wallets: number
+    backupTime?: string
 }
 
 const useStyles = makeStyles(() => ({
@@ -18,6 +20,7 @@ const useStyles = makeStyles(() => ({
         minHeight: 205,
         borderRadius: 8,
         background: MaskColorVar.infoBackground,
+        width: '100%',
     },
     item: {
         paddingBottom: 10,
@@ -38,12 +41,13 @@ export default function BackupPreviewCard({ json }: Props) {
 
     const records = [
         {
-            name: 'Account',
-            value: json.email,
+            name: 'Identity',
+            value: json.identity,
         },
         {
             name: 'Personas',
             value: json.personas,
+            sub: true,
         },
         {
             name: 'Associated account',
@@ -68,6 +72,10 @@ export default function BackupPreviewCard({ json }: Props) {
         {
             name: 'Local Wallet',
             value: json.wallets,
+        },
+        {
+            name: 'Backup Time',
+            value: json.backupTime,
         },
     ]
 

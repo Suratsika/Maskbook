@@ -1,9 +1,5 @@
 import { ProviderType } from '@masknet/web3-shared'
-import {
-    BackupJSONFileLatest,
-    BackupPreview,
-    getBackupPreviewInfo,
-} from '../../../utils/type-transform/BackupFormat/JSON/latest'
+import { BackupJSONFileLatest, BackupPreview, getBackupPreviewInfo } from '../../../utils'
 import { queryPersonasDB, queryProfilesDB } from '../../../database/Persona/Persona.db'
 import { queryUserGroupsDatabase } from '../../../database/group'
 import { queryPostsDB } from '../../../database/post'
@@ -11,9 +7,10 @@ import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupF
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { GroupRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/GroupRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { ProfileIdentifier, PersonaIdentifier, Identifier } from '../../../database/type'
+import { ProfileIdentifier, PersonaIdentifier, Identifier } from '@masknet/shared'
 import { getWallets } from '../../../plugins/Wallet/services'
 import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
+import type { BackupJSONFileVersion3 } from '../../../utils/type-transform/BackupFormat/JSON/version-3'
 
 export type { BackupPreview } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 export interface BackupOptions {
@@ -65,6 +62,10 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         userGroups,
     }
 
+    async function backupIdentity() {
+        userGroups.push(...(await queryUserGroupsDatabase(() => true)).map(GroupRecordToJSONFormat))
+    }
+
     async function backupAllPosts() {
         posts.push(...(await queryPostsDB(() => true)).map(PostRecordToJSONFormat))
     }
@@ -106,5 +107,6 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
 
 export async function generateBackupPreviewInfo(opts: Partial<BackupOptions> = {}): Promise<BackupPreview> {
     const json = await generateBackupJSON(opts)
-    return getBackupPreviewInfo(json)
+    // todo: for version3
+    return getBackupPreviewInfo(json as unknown as BackupJSONFileVersion3)
 }
