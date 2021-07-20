@@ -39,10 +39,9 @@ function registerPostCollectorInner(
 
     const getCurrentIdentifier = () => {
         const current = currentSelectedIdentity[activatedSocialNetworkUI.networkIdentifier]
-        return (
-            globalUIState.profiles.value.find((i) => i.identifier.toText() === current) ||
-            first(globalUIState.profiles.value)
-        )
+        const { value } = globalUIState.profiles
+        const matched = value.find((i) => i.identifier.toText() === current)
+        return matched ?? first(value)
     }
     const updateProfileInfo = memoize(
         (info: PostInfo) => {
