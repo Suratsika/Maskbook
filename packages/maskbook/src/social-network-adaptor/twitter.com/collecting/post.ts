@@ -3,7 +3,7 @@ import { IntervalWatcher } from '@dimensiondev/holoflows-kit'
 import { activatedSocialNetworkUI, creator, globalUIState, SocialNetworkUI as Next } from '../../../social-network'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { postIdParser } from '../utils/fetch'
-import { memoize } from 'lodash-es'
+import { first, memoize } from 'lodash-es'
 import Services from '../../../extension/service'
 import { injectMaskIconToPostTwitter } from '../injection/MaskbookIcon'
 import { postsImageSelector } from '../utils/selector'
@@ -41,7 +41,7 @@ function registerPostCollectorInner(
         const current = currentSelectedIdentity[activatedSocialNetworkUI.networkIdentifier]
         return (
             globalUIState.profiles.value.find((i) => i.identifier.toText() === current) ||
-            globalUIState.profiles.value[0]
+            first(globalUIState.profiles.value)
         )
     }
     const updateProfileInfo = memoize(

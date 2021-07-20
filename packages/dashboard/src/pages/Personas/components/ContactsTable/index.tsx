@@ -58,6 +58,8 @@ export interface ContactsTableProps {
     network: string
 }
 
+const PAGE_SIZE = 20
+
 export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
     const [page, setPage] = useState(1)
 
@@ -74,7 +76,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
                 avatar: profile.avatar,
             })),
             (item) => !item.favorite,
-        ).slice((page - 1) * 20, page * 20)
+        ).slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
     }, [value, page])
 
     return (
@@ -85,7 +87,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
             dataSource={dataSource}
             page={page}
             onPageChange={setPage}
-            count={ceil((value?.length ?? 0) / 20) ?? 1}
+            count={ceil((value?.length ?? 0) / PAGE_SIZE) ?? 1}
             showPagination={!loading && !error && !!value?.length}
         />
     )
@@ -130,7 +132,7 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                                         <ContactTableRow
                                             key={index}
                                             contact={item}
-                                            index={(page - 1) * 20 + index + 1}
+                                            index={(page - 1) * PAGE_SIZE + index + 1}
                                             network={network}
                                         />
                                     ))}

@@ -8,6 +8,7 @@ import { useDashboardI18N } from '../../../../locales'
 import { mapContactAvatarColor } from '../../../../utils/mapContactAvatarColor'
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
 import { PersonaContext } from '../../hooks/usePersonaContext'
+import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles(() => ({
     favorite: {
@@ -64,8 +65,8 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
         }
     }, [contact, currentPersona])
 
-    const handleClickInvite = useCallback(() => {
-        Services.Helper.queryPasteIntoPostBox(
+    const [{ loading: inviting }, handleClickInvite] = useAsyncFn(async () => {
+        await Services.Helper.queryPasteIntoPostBox(
             `https://${network}`,
             t.personas_invite_post({ identifier: contact.identifier.userId }),
         )
@@ -77,6 +78,7 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
             handleClickStar={handleClickStar}
             theme={theme}
             contact={contact}
+            inviting={inviting}
             index={index}
         />
     )
@@ -86,10 +88,11 @@ export interface ContactTableRowUIProps extends Omit<ContactTableRowProps, 'netw
     handleClickInvite(): void
     handleClickStar(): void
     theme: 'light' | 'dark'
+    inviting: boolean
 }
 
 export const ContactTableRowUI = memo<ContactTableRowUIProps>(
-    ({ contact, index, handleClickStar, handleClickInvite, theme }) => {
+    ({ contact, index, handleClickStar, handleClickInvite, theme, inviting }) => {
         const t = useDashboardI18N()
         const classes = useStyles()
         const [first, last] = contact.name.split(' ')
@@ -132,7 +135,12 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                 </TableCell>
                 <TableCell align="center">
                     {!contact.fingerprint ? (
-                        <Button color="secondary" size="small" className={classes.button} onClick={handleClickInvite}>
+                        <Button
+                            color="secondary"
+                            size="small"
+                            className={classes.button}
+                            onClick={handleClickInvite}
+                            disabled={inviting}>
                             {t.personas_contacts_invite()}
                         </Button>
                     ) : null}

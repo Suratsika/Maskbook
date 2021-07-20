@@ -3,6 +3,7 @@ import Services from '../../../extension/service'
 import type { Profile } from '../../../database'
 import { currentSelectedIdentity } from '../../../settings/settings'
 import { activatedSocialNetworkUI, globalUIState } from '../../../social-network'
+import { first } from 'lodash-es'
 
 type link = HTMLAnchorElement | null | undefined
 
@@ -30,7 +31,7 @@ export function getProfileIdentifierAtFacebook(
         const current = currentSelectedIdentity[activatedSocialNetworkUI.networkIdentifier]
         return (
             globalUIState.profiles.value.find((i) => i.identifier.toText() === current) ||
-            globalUIState.profiles.value[0]
+            first(globalUIState.profiles.value)
         )
     }
 
