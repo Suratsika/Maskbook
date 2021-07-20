@@ -186,7 +186,11 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
 
     return (
         <>
-            <TokenIcon classes={{ icon: classes.tokenIcon }} address={exchangeToken.address} />
+            <TokenIcon
+                classes={{ icon: classes.tokenIcon }}
+                address={exchangeToken.address}
+                logoURI={exchangeToken.logoURI}
+            />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
                 {isSameAddress(exchangeToken.address, NATIVE_TOKEN_ADDRESS)
@@ -619,7 +623,7 @@ export function ITO(props: ITO_Props) {
                         {hasLockTime ? (
                             <Grid item xs={6}>
                                 {isUnlocked ? (
-                                    Number(availability?.swapped) > 0 ? (
+                                    !availability?.claimed ? (
                                         <ActionButton
                                             onClick={onClaimButtonClick}
                                             variant="contained"
