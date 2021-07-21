@@ -373,6 +373,8 @@
     "plugin_wallet_fail_to_sign": "",
     "plugin_wallet_cancel_sign": "",
     "plugin_red_packet_display_name": "プラグイン: 投げ銭",
+    "plugin_red_packet_erc20_tab_title": "",
+    "plugin_red_packet_erc721_tab_title": "",
     "plugin_red_packet_split_mode": "分割モード",
     "plugin_red_packet_average": "平均",
     "plugin_red_packet_random": "ランダム",

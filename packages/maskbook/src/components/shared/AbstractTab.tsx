@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 import { Theme, Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
+import { useStylesExtends } from '../custom-ui-helper'
 
 const useStyles = makeStyles((theme: Theme) => ({
     tab: {
@@ -12,18 +13,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface TabPanelProps extends BoxProps {
     id?: string
-    label: string
+    label: string | React.ReactNode
+    disableFocusRipple?: boolean
+    disableRipple?: boolean
 }
 
-export interface AbstractTabProps {
+export interface AbstractTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator'> {
     tabs: Omit<TabPanelProps, 'height' | 'minHeight'>[]
     state: readonly [number, (next: number) => void]
     margin?: true | 'top' | 'bottom'
     height?: number | string
 }
 
-export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabProps) {
-    const classes = useStyles()
+export default function AbstractTab(props: AbstractTabProps) {
+    const { tabs, state, height = 200 } = props
+    const classes = useStylesExtends(useStyles(), props)
     const [value, setValue] = state
     const tabIndicatorStyle = tabs.length ? { width: 100 / tabs.length + '%' } : undefined
 
@@ -31,17 +35,23 @@ export default function AbstractTab({ tabs, state, height = 200 }: AbstractTabPr
         <>
             <Paper square elevation={0}>
                 <Tabs
+                    className={classes.tabs}
+                    classes={{
+                        indicator: classes.indicator,
+                    }}
                     value={value}
                     TabIndicatorProps={{ style: tabIndicatorStyle }}
                     variant="fullWidth"
                     indicatorColor="primary"
                     textColor="primary"
                     onChange={(_: React.SyntheticEvent, newValue: number) => setValue(newValue)}>
-                    {tabs.map((tab) => (
+                    {tabs.map((tab, i) => (
                         <Tab
                             className={classes.tab}
+                            disableFocusRipple={tab.disableFocusRipple}
+                            disableRipple={tab.disableRipple}
                             label={tab.label}
-                            key={tab.label}
+                            key={i}
                             data-testid={`${tab.id?.toLowerCase()}_tab`}
                         />
                     ))}

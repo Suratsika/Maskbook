@@ -373,6 +373,8 @@
     "plugin_wallet_fail_to_sign": "",
     "plugin_wallet_cancel_sign": "",
     "plugin_red_packet_display_name": "플러그인: 빨간 백",
+    "plugin_red_packet_erc20_tab_title": "",
+    "plugin_red_packet_erc721_tab_title": "",
     "plugin_red_packet_split_mode": "분할 모드",
     "plugin_red_packet_average": "평균",
     "plugin_red_packet_random": "렌덤",
