@@ -1,3 +1,4 @@
+/// <reference path="./global.d.ts" />
 import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@material-ui/core'
 import * as Changes from './changes'
 import * as Components from './component-changes'
