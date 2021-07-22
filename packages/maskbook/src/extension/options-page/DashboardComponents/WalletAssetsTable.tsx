@@ -19,7 +19,7 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import type { Asset } from '@masknet/web3-shared'
+import { Asset, useERC721TokenDetailed } from '@masknet/web3-shared'
 import {
     CurrencyType,
     currySameAddress,
@@ -39,7 +39,7 @@ import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'
 import { useTrustedERC20TokensFromDB } from '../../../plugins/Wallet/hooks/useERC20Tokens'
 import { getTokenUSDValue } from '../../../plugins/Wallet/helpers'
-import { currentEtherPriceSettings } from '../../../plugins/Wallet/settings'
+import { useMemo } from 'react'
 
 const useStyles = makeStyles<
     Theme,
@@ -103,12 +103,6 @@ function ViewDetailed(props: ViewDetailedProps) {
 
     const stableTokens = useStableTokensDebank()
     const chainDetailed = useChainDetailed()
-
-    const etherPrice = useValueRef(currentEtherPriceSettings)
-
-    console.log({
-        etherPrice,
-    })
 
     if (!chainDetailed) return null
 
@@ -215,6 +209,17 @@ export function WalletAssetsTable(props: WalletAssetsTableProps) {
     } = useAssets(erc20Tokens)
 
     const [more, setMore] = useState(false)
+
+    const token = useMemo(
+        () => ({
+            address: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
+            tokenId: '1',
+        }),
+        [],
+    )
+    const erc721TokenDetailed = useERC721TokenDetailed(token.address, token)
+
+    console.log(erc721TokenDetailed)
 
     if (detailedTokensError)
         return (
