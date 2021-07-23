@@ -1,9 +1,7 @@
 import { serialize } from '../serializer'
 import { Result, Ok, Err } from 'ts-results'
+import { encodeArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
 
-/**
- * @internal symbol that used to construct this type from the Identifier
- */
 const $fromString = Symbol()
 /**
  * This type only refers to the stringified Identifier
@@ -220,6 +218,22 @@ export class ECKeyIdentifier extends Identifier {
 export type PersonaIdentifier = ECKeyIdentifier
 // eslint-disable-next-line no-redeclare
 export const PersonaIdentifier = [ECKeyIdentifier]
+
+@serialize('CredentialIdentifier')
+export class CredentialIdentifier extends Identifier {
+    constructor(public readonly credentialBuffer: ArrayBuffer) {
+        super()
+    }
+    toText() {
+        const credential = encodeArrayBuffer(this.credentialBuffer)
+        return `credential:${credential}`
+    }
+    static [$fromString](str: string) {
+        const [credential] = str.split('/')
+        const credentialBuffer = decodeArrayBuffer(credential)
+        return new CredentialIdentifier(credentialBuffer)
+    }
+}
 
 /**
  * Because "/" is used to split parts in identifier

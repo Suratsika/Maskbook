@@ -35,6 +35,7 @@ export const Services = {
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
+    WebAuthn: add(() => import('./background-script/WebAuthnServer'), 'WebAuthn'),
 }
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
@@ -53,6 +54,7 @@ if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
             './background-script/SettingsService',
             './background-script/ThirdPartyPlugin',
             './background-script/SocialNetworkService',
+            './background-script/WebAuthnServer',
             './service-generator',
         ],
         () => document.dispatchEvent(new Event(SERVICE_HMR_EVENT)),
@@ -66,7 +68,7 @@ if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
  * @param generator Is the service is a generator?
  */
 function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
-    let channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
+    const channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
 
     const isBackground = isEnvironment(Environment.ManifestBackground)
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
