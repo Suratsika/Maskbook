@@ -25,7 +25,9 @@ async function getERC721TokenDetailed(
         token?.symbol ?? (await safeNonPayableTransactionCall(erc721TokenContract?.methods.symbol())) ?? '',
         token?.baseURI ?? (await safeNonPayableTransactionCall(erc721TokenContract?.methods.baseURI())) ?? '',
         token?.tokenURI ??
-            (token?.tokenId ? (await safeNonPayableTransactionCall(erc721TokenContract?.methods.tokenURI(token.tokenId))) ?? '' : ''),
+            (token?.tokenId
+                ? (await safeNonPayableTransactionCall(erc721TokenContract?.methods.tokenURI(token.tokenId))) ?? ''
+                : ''),
     ])
     const [name, symbol, baseURI, tokenURI] = results.map((result) =>
         result.status === 'fulfilled' ? result.value : '',
@@ -61,7 +63,6 @@ async function getERC721TokenAsset(tokenURI?: string) {
     } catch (e) {
         void 0
     }
-
 
     return
 }
