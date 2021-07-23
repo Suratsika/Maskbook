@@ -19,7 +19,7 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { Asset } from '@masknet/web3-shared'
+import type { Asset } from '@masknet/web3-shared'
 import {
     CurrencyType,
     currySameAddress,
